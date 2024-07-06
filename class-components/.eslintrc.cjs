@@ -6,7 +6,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:react-compiler/recommended',
     'prettier',
     'plugin:prettier/recommended',
   ],
@@ -20,5 +19,11 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'react-compiler/react-compiler': 'error',
+    'react/react-in-jsx-scope': 'off',
   },
+  settings: {
+    react: {
+      version: 'detect',
+    }
+  }
 }
