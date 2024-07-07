@@ -13,6 +13,12 @@
     "prepare": "husky install",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
+  "lint-staged": {
+    "src/**/*.{js,ts,jsx,tsx,}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -31,6 +37,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
