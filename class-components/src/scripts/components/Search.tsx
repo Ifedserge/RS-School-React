@@ -8,6 +8,10 @@ class Search extends Component<SearchProps, SearchState> {
     this.state = {
       searchTerm: savedSearchTerm,
     };
+
+    if (!savedSearchTerm) {
+      this.props.onSearch('');
+    }
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,8 +19,10 @@ class Search extends Component<SearchProps, SearchState> {
   };
 
   handleSearch = () => {
+    const trimmedSearchTerm = this.state.searchTerm.trim();
     localStorage.setItem('searchTerm', this.state.searchTerm);
-    this.props.onSearch(this.state.searchTerm);
+    this.props.onSearch(trimmedSearchTerm);
+    console.log(trimmedSearchTerm);
   };
 
   render() {

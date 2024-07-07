@@ -6,6 +6,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:react-compiler/recommended',
     'prettier',
     'plugin:prettier/recommended',
   ],
@@ -18,8 +19,9 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'react-compiler/react-compiler': 'error',
+    'react-compiler/no-unsupported-browser-features': 'error',
     'react/react-in-jsx-scope': 'off',
+    'prettier/prettier': 'error',
   },
   settings: {
     react: {

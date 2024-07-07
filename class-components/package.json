@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "format-code": "npx prettier --write .",
-    "format-fix": "prettier --write 'src/**/*.{ts,tsx,js,jsx}",
+    "format:fix": "prettier --write 'src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint src --fix",
     "prepare": "husky install",
     "lint": "eslint src/**/*.{ts,tsx}"
