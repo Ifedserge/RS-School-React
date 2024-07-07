@@ -1,11 +1,8 @@
 import React from 'react';
 import Search from './Search';
+import { SearchProps } from '../types/interfaces';
 
-interface TopSectionProps {
-  onSearch: (searchTerm: string) => void;
-}
-
-const TopSection: React.FC<TopSectionProps> = ({ onSearch }) => {
+const TopSection: React.FC<SearchProps> = ({ onSearch }) => {
   return (
     <div className='top-section'>
       <Search onSearch={onSearch} />

@@ -55,7 +55,6 @@ class BottomSection extends Component<SearchState, BottomSectionState> {
           return result.results.map(
             (item: People | Films | Starships | Vehicles | Species | Planets) => {
               if ('birth_year' in item && 'skin_color' in item && 'height' in item) {
-                console.log(item);
                 return {
                   name: `Name: ${item.name}`,
                   description: `Birth Year: ${item.birth_year}`,
