@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Component } from 'react';
 import {
   BottomSectionState,
@@ -9,7 +10,9 @@ import {
   Films,
   People,
   Item,
-} from '../types/interfaces';
+} from '../BottomSection/BottomSection.type';
+
+import './BottomSection.css';
 
 class BottomSection extends Component<SearchState, BottomSectionState> {
   constructor(props: SearchState) {
@@ -102,7 +105,7 @@ class BottomSection extends Component<SearchState, BottomSectionState> {
     }
   };
 
-  render() {
+  render(): ReactNode {
     const { items, error } = this.state;
     return (
       <div className='bottom-section'>

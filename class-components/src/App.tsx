@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import './App.css';
-import TopSection from './scripts/components/TopSection';
-import BottomSection from './scripts/components/BottomSection';
+import TopSection from './components/TopSection/TopSection';
+import BottomSection from './components/BottomSection/BottomSection';
 import { SearchState } from './scripts/types/interfaces';
-import ErrorBoundary from './scripts/components/ErrorBoundary';
 
 class App extends Component<Record<string, never>, SearchState> {
   constructor(props: Record<string, never>) {
@@ -24,15 +23,13 @@ class App extends Component<Record<string, never>, SearchState> {
 
   render() {
     return (
-      <ErrorBoundary>
-        <div className='app'>
-          <TopSection onSearch={this.handleSearch} />
-          <button onClick={this.handleError} className='btn'>
-            Throw Error
-          </button>
-          <BottomSection key={this.state.searchTerm} searchTerm={this.state.searchTerm} />
-        </div>
-      </ErrorBoundary>
+      <div className='app'>
+        <TopSection onSearch={this.handleSearch} />
+        <button onClick={this.handleError} className='btn'>
+          Throw Error
+        </button>
+        <BottomSection key={this.state.searchTerm} searchTerm={this.state.searchTerm} />
+      </div>
     );
   }
 }

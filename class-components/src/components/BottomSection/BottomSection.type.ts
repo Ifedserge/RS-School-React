@@ -18,10 +18,6 @@ export interface BottomSectionState {
   error: boolean;
 }
 
-export interface SearchProps {
-  onSearch: (searchTerm: string) => void;
-}
-
 export interface People {
   name: string;
   birth_year: string;
