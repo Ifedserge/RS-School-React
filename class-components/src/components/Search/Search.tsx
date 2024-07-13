@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SearchState, SearchProps } from '../../scripts/types/interfaces';
+import { SearchState, SearchProps } from './Search.type';
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {

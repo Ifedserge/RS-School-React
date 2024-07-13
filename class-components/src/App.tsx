@@ -1,37 +1,29 @@
-import { Component } from 'react';
+import React from 'react';
 import './App.css';
 import TopSection from './components/TopSection/TopSection';
 import BottomSection from './components/BottomSection/BottomSection';
-import { SearchState } from './scripts/types/interfaces';
+import useLocalStorage from './hooks/useSearchQuery/useSearcgQuery';
 
-class App extends Component<Record<string, never>, SearchState> {
-  constructor(props: Record<string, never>) {
-    super(props);
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      searchTerm: savedSearchTerm,
-    };
-  }
+const App: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
 
-  handleSearch = (searchTerm: string) => {
-    this.setState({ searchTerm });
+  const handleSearch = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
   };
 
-  handleError = () => {
+  const handleError = () => {
     throw new Error('Test Error! Test error!');
   };
 
-  render() {
-    return (
-      <div className='app'>
-        <TopSection onSearch={this.handleSearch} />
-        <button onClick={this.handleError} className='btn'>
-          Throw Error
-        </button>
-        <BottomSection key={this.state.searchTerm} searchTerm={this.state.searchTerm} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className='app'>
+      <TopSection onSearch={handleSearch} />
+      <button onClick={handleError} className='btn'>
+        Throw Error
+      </button>
+      <BottomSection key={searchTerm} searchTerm={searchTerm} />
+    </div>
+  );
+};
 
 export default App;
