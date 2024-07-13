@@ -1,0 +1,12 @@
+.top-section {
+    max-width: 80%;
+    margin: 0 auto;
+    border: 2px solid black;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+.top-section div {
+    padding-left: 20px;
+}
