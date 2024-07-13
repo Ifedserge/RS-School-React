@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-import { Component } from 'react';
-import { BottomSectionState, SearchState, Item, ApiLink, ItemType } from './BottomSection.type';
+import React, { useEffect, useState } from 'react';
+import { SearchState, Item, ApiLink, ItemType } from './BottomSection.type';
 import {
   isItemPeople,
   formatPeople,
@@ -16,26 +15,15 @@ import {
 
 import './BottomSection.css';
 
-class BottomSection extends Component<SearchState, BottomSectionState> {
-  constructor(props: SearchState) {
-    super(props);
-    this.state = {
-      items: [],
-      error: false,
-    };
-  }
+const BottomSection: React.FC<SearchState> = ({ searchTerm }) => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
-  componentDidMount() {
-    this.fetchItems(this.props.searchTerm);
-  }
+  useEffect(() => {
+    fetchItems(searchTerm);
+  }, [searchTerm]);
 
-  componentDidUpdate(prevProps: SearchState) {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
-      this.fetchItems(this.props.searchTerm);
-    }
-  }
-
-  fetchItems = async (searchTerm: string) => {
+  const fetchItems = async (searchTerm: string) => {
     const endpoints = searchTerm
       ? [
           ApiLink.People,
@@ -79,37 +67,36 @@ class BottomSection extends Component<SearchState, BottomSectionState> {
         return [];
       });
 
-      this.setState({ items, error: items.length === 0 });
+      setItems(items);
+      setError(items.length === 0);
     } catch (error) {
       console.error('Error fetching items:', error);
-      this.setState({ items: [], error: true });
+      setItems([]);
+      setError(true);
     }
   };
 
-  render(): ReactNode {
-    const { items, error } = this.state;
-    return (
-      <div className='bottom-section'>
-        {items.length > 0 ? (
-          <div className='container'>
-            {items.map((item, index) => (
-              <div key={index} className='item'>
-                <h2>{item.name}</h2>
-                <p>{item.description}</p>
-                <p>{item.height}</p>
-                <p>{item.eyeColor}</p>
-                <p>{item.skinColor}</p>
-                <p>{item.climate}</p>
-                <p>{item.diameter}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>{error ? 'No results found' : 'Loading...'}</p>
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className='bottom-section'>
+      {items.length > 0 ? (
+        <div className='container'>
+          {items.map((item, index) => (
+            <div key={index} className='item'>
+              <h2>{item.name}</h2>
+              <p>{item.description}</p>
+              <p>{item.height}</p>
+              <p>{item.eyeColor}</p>
+              <p>{item.skinColor}</p>
+              <p>{item.climate}</p>
+              <p>{item.diameter}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>{error ? 'No results found' : 'Loading...'}</p>
+      )}
+    </div>
+  );
+};
 
 export default BottomSection;
