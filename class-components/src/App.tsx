@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import TopSection from './components/TopSection/TopSection';
 import BottomSection from './components/BottomSection/BottomSection';
-import useLocalStorage from './hooks/useSearchQuery/useSearcgQuery';
+import useLocalStorage from './hooks/useLocalStorage/useLocalStorage';
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');

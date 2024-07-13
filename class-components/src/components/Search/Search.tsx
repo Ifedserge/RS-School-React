@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { SearchProps } from './Search.type';
-import useLocalStorage from '../../hooks/useSearchQuery/useSearcgQuery';
+import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
 
 const Search: React.FC<SearchProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
