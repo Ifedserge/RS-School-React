@@ -1,3 +1,4 @@
+import { apiLink } from '../../api/api';
 export interface SearchState {
   searchTerm: string;
 }
@@ -49,4 +50,40 @@ export interface Planets {
   name: string;
   climate: string;
   diameter: string;
+}
+
+export enum ApiLink {
+  People = `${apiLink}/people/`,
+  Films = `${apiLink}/films/`,
+  Starships = `${apiLink}/starships/`,
+  Vehicles = `${apiLink}/vehicles/`,
+  Species = `${apiLink}/species/`,
+  Planets = `${apiLink}/planets/`,
+}
+
+export type ItemType = People | Films | Starships | Species | Planets;
+
+export enum PeopleProps {
+  birth_year = 'birth_year',
+  skin_color = 'skin_color',
+  height = 'height',
+  eye_color = 'eye_color',
+}
+
+export enum FilmProps {
+  opening_crawl = 'opening_crawl',
+  title = 'title',
+}
+
+export enum StarshipsProps {
+  model = 'model',
+}
+
+export enum SpeciesProps {
+  classsification = 'classification',
+}
+
+export enum PlanetProps {
+  climate = 'climate',
+  diameter = 'diameter',
 }
