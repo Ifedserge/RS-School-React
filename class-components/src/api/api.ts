@@ -1,1 +1,1 @@
-export const apiLink = 'https://swapi.dev/api/';
+export const apiLink = 'https://swapi.dev/api';
