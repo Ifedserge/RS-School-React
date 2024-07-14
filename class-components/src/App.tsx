@@ -24,13 +24,13 @@ const App: React.FC = () => {
           <Route
             path='/'
             element={
-              <>
+              <React.Fragment>
                 <TopSection onSearch={handleSearch} />
                 <button onClick={handleError} className='btn'>
                   Throw Error
                 </button>
-                <BottomSection key={searchTerm} searchTerm={searchTerm} />
-              </>
+                <BottomSection searchTerm={searchTerm} />
+              </React.Fragment>
             }
           />
           <Route path='/404' element={<NotFound />} />
