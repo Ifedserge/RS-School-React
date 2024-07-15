@@ -14,7 +14,6 @@ const DetailsSection: React.FC<DetailSectionProps> = ({ item, onClose }) => {
         setDetails({
           name: data.name,
           description: data.description,
-          // Добавьте другие поля, необходимые для отображения деталей
         });
       } catch (error) {
         console.error('Error fetching item details:', error);
@@ -36,7 +35,6 @@ const DetailsSection: React.FC<DetailSectionProps> = ({ item, onClose }) => {
           <div>
             <h2>{details.name}</h2>
             <p>{details.description}</p>
-            {/* Добавьте отображение других полей */}
           </div>
         )
       )}
