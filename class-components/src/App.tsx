@@ -13,10 +13,6 @@ const App: React.FC = () => {
     setSearchTerm(searchTerm);
   };
 
-  const handleError = () => {
-    throw new Error('Test Error! Test error!');
-  };
-
   return (
     <Router>
       <div className='app'>
@@ -24,15 +20,12 @@ const App: React.FC = () => {
           <Route
             path='/'
             element={
-              <React.Fragment>
+              <>
                 <TopSection onSearch={handleSearch} />
-                <button onClick={handleError} className='btn'>
-                  Throw Error
-                </button>
                 <BottomSection searchTerm={searchTerm} />
-              </React.Fragment>
+              </>
             }
-          />
+          ></Route>
           <Route path='/404' element={<NotFound />} />
         </Routes>
       </div>

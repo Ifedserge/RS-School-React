@@ -3,6 +3,17 @@ export interface SearchState {
   searchTerm: string;
 }
 
+export interface ApiResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
+export interface ApiError {
+  detail: string;
+}
+
 export interface Item {
   name: string;
   description: string;
@@ -12,6 +23,7 @@ export interface Item {
   model?: string;
   climate?: string;
   diameter?: string;
+  url: string;
 }
 
 export interface BottomSectionState {
@@ -25,6 +37,7 @@ export interface People {
   skin_color: string;
   height: string;
   eye_color: string;
+  url: string;
 }
 
 export interface Films {

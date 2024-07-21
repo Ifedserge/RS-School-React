@@ -14,9 +14,9 @@ const useLocalStorage = (key: string, initialValue: string) => {
   const setValue = (value: string) => {
     try {
       setStoredValue(value);
-      window.localStorage.setItem('searchTerm', value);
+      window.localStorage.setItem(key, value);
     } catch {
-      window.localStorage.setItem('searchTerm', '');
+      window.localStorage.setItem(key, '');
     }
   };
 

@@ -1,15 +1,7 @@
-export interface Item {
+export interface People {
   name: string;
-  description: string;
-  eyeColor?: string;
-  height?: string;
-  skinColor?: string;
-  model?: string;
-  climate?: string;
-  diameter?: string;
-}
-
-export interface DetailSectionProps {
-  item: Item;
-  onClose: () => void;
+  birth_year: string;
+  skin_color: string;
+  height: string;
+  eye_color: string;
 }

@@ -1,45 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { DetailSectionProps, Item } from './DetailSection.type';
+import { People } from './DetailSection.type';
 
-const DetailsSection: React.FC<DetailSectionProps> = ({ item, onClose }) => {
-  const [details, setDetails] = useState<Item | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+const DetailSection: React.FC<{ selectedItemId: string }> = ({ selectedItemId }) => {
+  const [selectedItem, setSelectedItem] = useState<People | null>(null);
 
   useEffect(() => {
-    const fetchDetails = async () => {
-      setLoading(true);
+    const fetchItemDetails = async () => {
       try {
-        const response = await fetch(item.url);
+        const response = await fetch(`https://swapi.dev/api/people/${selectedItemId}/`);
         const data = await response.json();
-        setDetails({
-          name: data.name,
-          description: data.description,
-        });
+        setSelectedItem(data);
       } catch (error) {
         console.error('Error fetching item details:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchDetails();
-  }, [item]);
+    if (selectedItemId) {
+      fetchItemDetails();
+    }
+  }, [selectedItemId]);
+
+  if (!selectedItem) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className='details-section'>
-      <button onClick={onClose}>Close</button>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        details && (
-          <div>
-            <h2>{details.name}</h2>
-            <p>{details.description}</p>
-          </div>
-        )
-      )}
+    <div className='item-details'>
+      <h2>{selectedItem.name}</h2>
+      <p>Birth Year: {selectedItem.birth_year}</p>
+      <p>Height: {selectedItem.height}</p>
+      <p>Eye Color: {selectedItem.eye_color}</p>
+      <p>Skin Color: {selectedItem.skin_color}</p>
     </div>
   );
 };
 
-export default DetailsSection;
+export default DetailSection;

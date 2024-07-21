@@ -1,57 +1,53 @@
 import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { PaginationProps } from './Pagintaion.type';
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, searchTerm }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
+interface PaginationProps {
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
+}
 
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      const newSearchParams = new URLSearchParams(location.search);
-      newSearchParams.set('page', (currentPage - 1).toString());
-      newSearchParams.set('search', searchTerm);
-      navigate(`${location.pathname}?${newSearchParams.toString()}`);
-    }
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  itemsPerPage,
+  totalItems,
+  onPageChange,
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const handleClick = (page: number) => {
+    onPageChange(page);
   };
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      const newSearchParams = new URLSearchParams(location.search);
-      newSearchParams.set('page', (currentPage + 1).toString());
-      newSearchParams.set('search', searchTerm);
-      navigate(`${location.pathname}?${newSearchParams.toString()}`);
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handleClick(i)}
+          className={currentPage === i ? 'active' : ''}
+        >
+          {i}
+        </button>
+      );
     }
+    return pageNumbers;
   };
-
-  const pages = [];
-  for (let i = 1; i <= totalPages; i++) {
-    const newSearchParams = new URLSearchParams(location.search);
-    newSearchParams.set('page', i.toString());
-    newSearchParams.set('search', searchTerm);
-    pages.push(
-      <Link
-        key={i}
-        to={`${location.pathname}?${newSearchParams.toString()}`}
-        style={{
-          margin: '0 5px',
-          textDecoration: currentPage === i ? 'underline' : 'none',
-        }}
-      >
-        {i}
-      </Link>
-    );
-  }
 
   return (
-    <div>
-      <button onClick={handlePrevious} disabled={currentPage === 1}>
-        Previous
-      </button>
-      {pages}
-      <button onClick={handleNext} disabled={currentPage === totalPages}>
-        Next
-      </button>
+    <div className='pagination'>
+      {currentPage > 1 && (
+        <button onClick={() => handleClick(currentPage - 1)} className='pagenations__btn'>
+          Previous
+        </button>
+      )}
+      {renderPageNumbers()}
+      {currentPage < totalPages && (
+        <button onClick={() => handleClick(currentPage + 1)} className='pagenations__btn'>
+          Next
+        </button>
+      )}
     </div>
   );
 };
