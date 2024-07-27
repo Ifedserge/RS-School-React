@@ -1,27 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { People } from './DetailSection.type';
 
-const DetailSection: React.FC<{ selectedItemId: string }> = ({ selectedItemId }) => {
-  const [selectedItem, setSelectedItem] = useState<People | null>(null);
-
-  useEffect(() => {
-    const fetchItemDetails = async () => {
-      try {
-        const response = await fetch(`https://swapi.dev/api/people/${selectedItemId}/`);
-        const data = await response.json();
-        setSelectedItem(data);
-      } catch (error) {
-        console.error('Error fetching item details:', error);
-      }
-    };
-
-    if (selectedItemId) {
-      fetchItemDetails();
-    }
-  }, [selectedItemId]);
+const DetailSection: React.FC = () => {
+  const { selectedItem } = useOutletContext<{ selectedItem: People | null }>();
 
   if (!selectedItem) {
-    return <p>Loading...</p>;
+    return <p>No details available</p>;
   }
 
   return (

@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { SearchState, Item, ApiLink, People } from './BottomSection.type';
+import { useSearchParams, useNavigate, Outlet } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/store';
+import { setSelectedItemId } from '../../store/searchSlice';
+import { Item, ApiLink, People } from './BottomSection.type';
 import { formatPeople } from './helpers';
 import Pagination from '../Pagination/Pagination';
-import DetailSection from '../DetailSection/DetailSection';
 import './BottomSection.css';
 
-const BottomSection: React.FC<SearchState> = ({ searchTerm }) => {
+const BottomSection: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const [items, setItems] = useState<Item[]>([]);
   const [error, setError] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
-  const [loading] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedItem, setSelectedItem] = useState<People | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const currentPage = Number(searchParams.get('page')) || 1;
-  const selectedItemId = searchParams.get('details');
-
   const itemsPerPage = 10;
 
-  const prevSearchTermRef = React.useRef(searchTerm);
+  useEffect(() => {
+    fetchItems(searchTerm, currentPage);
+  }, [searchTerm, currentPage]);
 
   useEffect(() => {
-    if (prevSearchTermRef.current !== searchTerm) {
-      setSearchParams({ page: '1' });
-      navigate(`?page=1`);
-      prevSearchTermRef.current = searchTerm;
-    } else {
-      fetchItems(searchTerm, currentPage);
+    const detailsId = searchParams.get('details');
+    if (detailsId) {
+      fetchItemDetails(detailsId);
     }
-  }, [searchTerm, currentPage, setSearchParams, navigate]);
+  }, [searchParams]);
 
   const fetchItems = async (searchTerm: string, page: number = 1) => {
     const url = searchTerm
@@ -48,30 +50,46 @@ const BottomSection: React.FC<SearchState> = ({ searchTerm }) => {
       setTotalItems(data.count);
       setError(items.length === 0);
     } catch (error) {
-      console.error('Error fetching items:', error);
       setItems([]);
       setError(true);
+    }
+  };
+
+  const fetchItemDetails = async (id: string) => {
+    setLoading(true);
+    const url = `${ApiLink.People}${id}/`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setSelectedItem(data);
+    } catch (error) {
+      console.error('Error fetching item details:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(page));
-    setSearchParams(params);
     navigate(`?${params.toString()}`);
   };
 
-  const handleItemClick = (id: string) => {
+  const handleItemClick = (url: string) => {
+    const id = url.split('/').filter(Boolean).pop();
+    if (!id) return;
+
     const params = new URLSearchParams(searchParams.toString());
     params.set('details', id);
-    setSearchParams(params);
     navigate(`?${params.toString()}`);
   };
 
   const handleCloseDetails = () => {
+    setSelectedItem(null);
+    dispatch(setSelectedItemId(null));
     const params = new URLSearchParams(searchParams.toString());
     params.delete('details');
-    setSearchParams(params);
     navigate(`?${params.toString()}`);
   };
 
@@ -82,11 +100,7 @@ const BottomSection: React.FC<SearchState> = ({ searchTerm }) => {
           <div className='left-section'>
             <div className='container'>
               {items.map((item) => (
-                <div
-                  key={item.url}
-                  className='item'
-                  onClick={() => handleItemClick(item.url.split('/').filter(Boolean).pop()!)}
-                >
+                <div key={item.url} className='item' onClick={() => handleItemClick(item.url)}>
                   <h2>{item.name}</h2>
                   <p>{item.description}</p>
                   <p>{item.height}</p>
@@ -102,10 +116,10 @@ const BottomSection: React.FC<SearchState> = ({ searchTerm }) => {
               onPageChange={handlePageChange}
             />
           </div>
-          {selectedItemId && (
+          {selectedItem && (
             <div className='right-section'>
               <button onClick={handleCloseDetails}>Close</button>
-              {loading ? <p>Loading...</p> : <DetailSection selectedItemId={selectedItemId} />}
+              {loading ? <p>Loading...</p> : <Outlet context={{ selectedItem }} />}
             </div>
           )}
         </div>

@@ -1,35 +1,28 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import './App.css';
 import TopSection from './components/TopSection/TopSection';
 import BottomSection from './components/BottomSection/BottomSection';
-import useLocalStorage from './hooks/useLocalStorage/useLocalStorage';
+import DetailSection from './components/DetailSection/DetailSection';
 import NotFound from './components/NotFound/NotFound';
+import store from './store/store';
 
 const App: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-
-  const handleSearch = (searchTerm: string) => {
-    setSearchTerm(searchTerm);
-  };
-
   return (
-    <Router>
-      <div className='app'>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <>
-                <TopSection onSearch={handleSearch} />
-                <BottomSection searchTerm={searchTerm} />
-              </>
-            }
-          ></Route>
-          <Route path='/404' element={<NotFound />} />
-        </Routes>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className='app'>
+          <TopSection />
+          <Routes>
+            <Route path='/' element={<BottomSection />}>
+              <Route path='' element={<DetailSection />} />
+            </Route>
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </div>
+      </Router>
+    </Provider>
   );
 };
 
