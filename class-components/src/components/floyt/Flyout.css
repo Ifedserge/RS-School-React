@@ -1,0 +1,7 @@
+.flout {
+    display: flex;
+}
+.flout button,
+.flout p {
+    margin: 5px;
+}

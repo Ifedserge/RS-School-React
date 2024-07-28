@@ -9,6 +9,7 @@ import {
   setItems,
   toggleSelectedItem,
 } from '../../store/searchSlice';
+import Flyout from '../floyt/Flyout';
 import { People } from './BottomSection.type';
 import Pagination from '../Pagination/Pagination';
 import './BottomSection.css';
@@ -73,7 +74,7 @@ const BottomSection: React.FC = () => {
     <div className='bottom-section'>
       {isLoading && <p>Loading...</p>}
       {error && <p>Error loading data</p>}
-      {data && data.results.length > 0 ? (
+      {!isLoading && data && data.results.length > 0 ? (
         <div className='split-view'>
           <div className='left-section'>
             <div className='container'>
@@ -94,6 +95,7 @@ const BottomSection: React.FC = () => {
               totalItems={data.count}
               onPageChange={handlePageChange}
             />
+            {selectedItems.length > 0 && <Flyout />}
           </div>
           {selectedItem && (
             <div className='right-section'>
@@ -103,7 +105,7 @@ const BottomSection: React.FC = () => {
           )}
         </div>
       ) : (
-        <p>No results found</p>
+        !isLoading && <p>No results found</p>
       )}
     </div>
   );

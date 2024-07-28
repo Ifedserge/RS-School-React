@@ -34,9 +34,18 @@ const searchSlice = createSlice({
         state.selectedItems.push(action.payload);
       }
     },
+    unselectAll: (state) => {
+      state.selectedItems = [];
+    },
   },
 });
 
-export const { setSearchTerm, setSelectedItemId, setSelectedItem, setItems, toggleSelectedItem } =
-  searchSlice.actions;
+export const {
+  setSearchTerm,
+  setSelectedItemId,
+  setSelectedItem,
+  setItems,
+  toggleSelectedItem,
+  unselectAll,
+} = searchSlice.actions;
 export default searchSlice.reducer;
