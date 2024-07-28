@@ -8,10 +8,10 @@
   width: 90%;
   height: 100vh;
   margin: 0 auto;
-  background-image: url('../src/assets/dart.jpg');
+  /* background-image: url('../src/assets/dart.jpg');
   background-position: right bottom;
   background-repeat: no-repeat;
-  background-size: 50%;
+  background-size: 50%; */
 }
 
 
@@ -25,4 +25,17 @@
    position: absolute;
    top: 25px;
    right: 50px;
+}
+
+body.light {
+  background-color: white;
+  color: black;
+}
+body.light {
+  border-color: white;
+}
+
+body.dark {
+  background-color: black;
+  color: white;
 }
