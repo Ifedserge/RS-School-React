@@ -1,0 +1,41 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  max-width: 1280px;
+  width: 90%;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+
+
+
+.btn {
+    width: 100px;
+    height: 25px;
+    margin: 0 auto;
+   cursor: pointer;
+   position: absolute;
+   top: 25px;
+   right: 50px;
+}
+
+body.light {
+  background-color: white;
+  color: black;
+}
+body.light {
+  border-color: white;
+}
+
+body.dark {
+  background-color: black;
+  color: white;
+}
+
+button {
+  cursor: pointer;
+}
