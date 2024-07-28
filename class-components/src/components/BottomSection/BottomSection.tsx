@@ -3,7 +3,12 @@ import { useSearchParams, useNavigate, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetPeopleQuery } from '../../store/apiSlice';
 import { RootState, AppDispatch } from '../../store/store';
-import { setSelectedItemId, setSelectedItem, setItems } from '../../store/searchSlice';
+import {
+  setSelectedItemId,
+  setSelectedItem,
+  setItems,
+  toggleSelectedItem,
+} from '../../store/searchSlice';
 import { People } from './BottomSection.type';
 import Pagination from '../Pagination/Pagination';
 import './BottomSection.css';
@@ -13,6 +18,7 @@ const BottomSection: React.FC = () => {
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const selectedItems = useSelector((state: RootState) => state.search.selectedItems);
 
   const currentPage = Number(searchParams.get('page')) || 1;
   const { data, error, isLoading } = useGetPeopleQuery({ search: searchTerm, page: currentPage });
@@ -59,6 +65,10 @@ const BottomSection: React.FC = () => {
     navigate(`?${params.toString()}`);
   };
 
+  const handleChechboxChange = (id: string) => {
+    dispatch(toggleSelectedItem(id));
+  };
+
   return (
     <div className='bottom-section'>
       {isLoading && <p>Loading...</p>}
@@ -68,8 +78,13 @@ const BottomSection: React.FC = () => {
           <div className='left-section'>
             <div className='container'>
               {data.results.map((item: People) => (
-                <div key={item.url} className='item' onClick={() => handleItemClick(item.url)}>
-                  <h2>{item.name}</h2>
+                <div key={item.url} className='item'>
+                  <input
+                    type='checkbox'
+                    checked={selectedItems.includes(item.url)}
+                    onChange={() => handleChechboxChange(item.url)}
+                  />
+                  <h2 onClick={() => handleItemClick(item.url)}>{item.name}</h2>
                 </div>
               ))}
             </div>

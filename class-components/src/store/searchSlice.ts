@@ -1,5 +1,5 @@
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { People } from './store.type';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SearchState } from './store.type';
 
 const initialState: SearchState = {
@@ -7,6 +7,7 @@ const initialState: SearchState = {
   selectedItemId: null,
   selectedItem: null,
   items: [],
+  selectedItems: [],
 };
 
 const searchSlice = createSlice({
@@ -25,8 +26,17 @@ const searchSlice = createSlice({
     setItems: (state, action: PayloadAction<People[]>) => {
       state.items = action.payload;
     },
+    toggleSelectedItem: (state, action: PayloadAction<string>) => {
+      const index = state.selectedItems.indexOf(action.payload);
+      if (index > -1) {
+        state.selectedItems.splice(index, 1);
+      } else {
+        state.selectedItems.push(action.payload);
+      }
+    },
   },
 });
 
-export const { setSearchTerm, setSelectedItemId, setSelectedItem, setItems } = searchSlice.actions;
+export const { setSearchTerm, setSelectedItemId, setSelectedItem, setItems, toggleSelectedItem } =
+  searchSlice.actions;
 export default searchSlice.reducer;

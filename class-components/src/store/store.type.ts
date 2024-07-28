@@ -3,6 +3,7 @@ export interface SearchState {
   selectedItemId: string | null;
   selectedItem: People | null;
   items: People[];
+  selectedItems: string[];
 }
 
 export interface People {
