@@ -73,30 +73,3 @@ export enum ApiLink {
   Species = `${apiLink}/species/`,
   Planets = `${apiLink}/planets/`,
 }
-
-export type ItemType = People | Films | Starships | Species | Planets;
-
-export enum PeopleProps {
-  birth_year = 'birth_year',
-  skin_color = 'skin_color',
-  height = 'height',
-  eye_color = 'eye_color',
-}
-
-export enum FilmProps {
-  opening_crawl = 'opening_crawl',
-  title = 'title',
-}
-
-export enum StarshipsProps {
-  model = 'model',
-}
-
-export enum SpeciesProps {
-  classsification = 'classification',
-}
-
-export enum PlanetProps {
-  climate = 'climate',
-  diameter = 'diameter',
-}

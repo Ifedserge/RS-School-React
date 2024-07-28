@@ -9,7 +9,7 @@ import {
   setItems,
   toggleSelectedItem,
 } from '../../store/searchSlice';
-import Flyout from '../floyt/Flyout';
+import Flyout from '../Floyt/Flyout';
 import { People } from './BottomSection.type';
 import Pagination from '../Pagination/Pagination';
 import './BottomSection.css';
