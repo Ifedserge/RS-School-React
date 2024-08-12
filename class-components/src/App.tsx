@@ -1,44 +1,47 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import './App.css';
-import TopSection from './components/TopSection/TopSection';
-import BottomSection from './components/BottomSection/BottomSection';
-import DetailSection from './components/DetailSection/DetailSection';
-import NotFound from './components/NotFound/NotFound';
-import store from './store/store';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { RootState, AppDispatch } from './store/store';
+import { setSearchTerm } from './store/searchSlice';
 
-const AppContent: React.FC = () => {
-  const { theme } = useTheme();
+const Search: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+  const router = useRouter();
 
   useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
+    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
+    dispatch(setSearchTerm(savedSearchTerm));
+  }, [dispatch]);
+
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm);
+  }, [searchTerm]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearchTerm(event.target.value);
+  };
+
+  const handleSearch = () => {
+    const trimmedSearchTerm = localSearchTerm.trim();
+    dispatch(setSearchTerm(trimmedSearchTerm));
+    localStorage.setItem('searchTerm', trimmedSearchTerm);
+    router.push(`/?search=${trimmedSearchTerm}&page=1`);
+  };
 
   return (
-    <div className='app'>
-      <TopSection />
-      <Routes>
-        <Route path='/' element={<BottomSection />}>
-          <Route path='' element={<DetailSection />} />
-        </Route>
-        <Route path='*' element={<NotFound />} />
-      </Routes>
+    <div>
+      <input
+        type='text'
+        value={localSearchTerm}
+        onChange={handleChange}
+        placeholder='Enter your request'
+      />
+      <button onClick={handleSearch}>Search</button>
     </div>
   );
 };
 
-const App: React.FC = () => {
-  return (
-    <Provider store={store}>
-      <ThemeProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </ThemeProvider>
-    </Provider>
-  );
-};
-
-export default App;
+export default Search;

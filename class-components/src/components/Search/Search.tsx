@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { RootState, AppDispatch } from '../../store/store';
 import { setSearchTerm } from '../../store/searchSlice';
 
@@ -8,7 +10,7 @@ const Search: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
@@ -27,7 +29,7 @@ const Search: React.FC = () => {
     const trimmedSearchTerm = localSearchTerm.trim();
     dispatch(setSearchTerm(trimmedSearchTerm));
     localStorage.setItem('searchTerm', trimmedSearchTerm);
-    navigate(`?search=${trimmedSearchTerm}&page=1`);
+    router.push(`?search=${trimmedSearchTerm}&page=1`);
   };
 
   return (

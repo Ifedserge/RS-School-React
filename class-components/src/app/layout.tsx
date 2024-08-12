@@ -1,15 +1,25 @@
-import type { Metadata } from 'next';
-export const metadata: Metadata = {
-  title: 'Star Wars',
+'use client';
+
+import React from 'react';
+import { Provider } from 'react-redux';
+import '../styles/globals.css';
+import store from '../store/store';
+import { ThemeProvider } from '../contexts/ThemeContext';
+import TopSection from '../components/TopSection/TopSection';
+
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Provider store={store}>
+      <ThemeProvider>
+        <html lang='en'>
+          <body>
+            <TopSection />
+            <main>{children}</main>
+          </body>
+        </html>
+      </ThemeProvider>
+    </Provider>
+  );
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang='en'>
-      <body>
-        <div id='root'>{children}</div>
-        <script type='module' src='/src/main.tsx'></script>
-      </body>
-    </html>
-  );
-}
+export default RootLayout;

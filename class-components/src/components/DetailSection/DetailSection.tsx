@@ -1,14 +1,12 @@
+'use client';
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useGetPersonQuery } from '../../store/apiSlice';
 
 const DetailSection: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get('details');
-  const { data, error, isLoading } = useGetPersonQuery(id || '');
-
-  console.log('DetailSection rendered');
-  console.log('Selected item:', data);
+  const router = useRouter();
+  const { id } = router.query;
+  const { data, error, isLoading } = useGetPersonQuery((id as string) || '');
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
