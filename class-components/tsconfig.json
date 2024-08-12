@@ -1,13 +1,4 @@
 {
-  // "files": [],
-  // "references": [
-  //   {
-  //     "path": "./tsconfig.app.json"
-  //   },
-  //   {
-  //     "path": "./tsconfig.node.json"
-  //   }
-  // ],
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -23,8 +14,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "allowImportingTsExtensions": true
+    "jsx": "preserve",
+    "allowImportingTsExtensions": true,
+    "plugins": [
+      { "name": "next" }
+    ],
+    "incremental": true
   },
-  "include": ["src"]
+  "include": ["src", "./dist/types/**/*.ts", "./next-env.d.ts"],
+  "exclude": ["./node_modules"],
 }

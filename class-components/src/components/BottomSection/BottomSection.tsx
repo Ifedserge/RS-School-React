@@ -1,29 +1,35 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate, Outlet } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetPeopleQuery } from '../../store/apiSlice';
 import { RootState, AppDispatch } from '../../store/store';
+import Flyout from '../Floyt/Flyout';
+import Pagination from '../Pagination/Pagination';
+import { People } from './BottomSection.type';
+import './BottomSection.css';
 import {
-  setSelectedItemId,
-  setSelectedItem,
   setItems,
+  setSelectedItem,
+  setSelectedItemId,
   toggleSelectedItem,
 } from '../../store/searchSlice';
-import Flyout from '../Floyt/Flyout';
-import { People } from './BottomSection.type';
-import Pagination from '../Pagination/Pagination';
-import './BottomSection.css';
 
 const BottomSection: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const selectedItems = useSelector((state: RootState) => state.search.selectedItems);
 
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading } = useGetPeopleQuery({ search: searchTerm, page: currentPage });
   const [selectedItem, setSelectedItemLocal] = useState<People | null>(null);
+
+  useEffect(() => {
+    const page = Number(new URLSearchParams(window.location.search).get('page')) || 1;
+    setCurrentPage(page);
+  }, [router]);
 
   useEffect(() => {
     if (data) {
@@ -32,38 +38,51 @@ const BottomSection: React.FC = () => {
   }, [data, dispatch]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     const detailsId = searchParams.get('details');
     if (detailsId && data) {
       const foundItem = data.results.find((item) => item.url.includes(detailsId));
-      setSelectedItemLocal(foundItem || null);
-      dispatch(setSelectedItem(foundItem || null));
+      if (foundItem) {
+        setSelectedItemLocal(foundItem);
+        dispatch(setSelectedItem(foundItem));
+      } else {
+        setSelectedItemLocal(null);
+        dispatch(setSelectedItem(null));
+      }
     }
-  }, [searchParams, data, dispatch]);
+  }, [data, dispatch, router]);
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', String(page));
-    setSearchParams(params);
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('page', String(page));
+    router.push(`?${searchParams.toString()}`);
+    setCurrentPage(page);
   };
 
   const handleItemClick = (url: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
     const id = url.split('/').filter(Boolean).pop();
     if (!id) return;
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('details', id);
-    setSearchParams(params);
-    navigate(`?${params.toString()}`);
+    searchParams.set('details', id);
+    router.push(`?${searchParams.toString()}`);
+
+    if (data) {
+      const foundItem = data.results.find((item) => item.url.includes(id));
+      if (foundItem) {
+        setSelectedItemLocal(foundItem);
+        dispatch(setSelectedItem(foundItem));
+      }
+    }
   };
 
   const handleCloseDetails = () => {
     setSelectedItemLocal(null);
     dispatch(setSelectedItemId(null));
     dispatch(setSelectedItem(null));
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('details');
-    setSearchParams(params);
-    navigate(`?${params.toString()}`);
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.delete('details');
+    router.push(`?${searchParams.toString()}`);
   };
 
   const handleChechboxChange = (id: string) => {
@@ -100,7 +119,13 @@ const BottomSection: React.FC = () => {
           {selectedItem && (
             <div className='right-section'>
               <button onClick={handleCloseDetails}>Close</button>
-              <Outlet context={{ selectedItem }} />
+              <div>
+                <h2>{selectedItem.name}</h2>
+                <p>Birth Year: {selectedItem.birth_year}</p>
+                <p>Height: {selectedItem.height}</p>
+                <p>Eye Color: {selectedItem.eye_color}</p>
+                <p>Skin Color: {selectedItem.skin_color}</p>
+              </div>
             </div>
           )}
         </div>
